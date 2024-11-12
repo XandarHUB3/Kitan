@@ -1,15 +1,3 @@
-wait(1)
-
-
-
-
-
-
-
-
-
-
-
 if game.PlaceId == 2753915549 or game.PlaceId == 4442272183 or game.PlaceId == 7449423635 then
 local library = loadstring(game:HttpGet("https://raw.githubusercontent.com/StepZazaX2/UI/main/UI"))()
 local venyx = library.new("Mu hub| BLOX FRUIT UPDATE 17", 5013109572)

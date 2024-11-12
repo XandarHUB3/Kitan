@@ -1,279 +1,200 @@
-for i,v in pairs(getconnections(game.Players.LocalPlayer.Idled)) do
-	v:Disable()
-end
-local tools = {}
-
-for i,v in pairs(game.Players.LocalPlayer.Backpack:GetChildren()) do
-	if v:IsA("Tool") then
-		table.insert(tools, v.Name)
-	end
-end
-
----autofarm Level
----lv 0-10
-function CheckQuest()
-	local Lv = game.Players.LocalPlayer.Data.Level.Value
-	 if Lv == 0 or Lv <= 10 then
-	 Ms = "Bandit [Lv. 5]"
-	 NM = "Bandit"
-	 LQ = 1
-	 NQ = "BanditQuest1"
-	 CQ = CFrame.new(1062.64697265625, 16.516624450683594, 1546.55224609375)
-	 end
- end
- function TP(P)
-	 Distance = (P.Position - game.Players.LocalPlayer.Character.HumanoidRootPart.Position).Magnitude
-	 if Distance < 10 then
-		 Speed = 1000
-	 elseif Distance < 170 then
-		 game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = P
-		 Speed = 350
-	 elseif Distance < 1000 then
-		 Speed = 350
-	 elseif Distance >= 1000 then
-		 Speed = 300
-	 end
-	 game:GetService("TweenService"):Create(
-		 game.Players.LocalPlayer.Character.HumanoidRootPart,
-		 TweenInfo.new(Distance/Speed, Enum.EasingStyle.Linear),
-		 {CFrame = P}
-	 ):Play()
- end
- 
- spawn(function()
-	while task.wait() do
-		if _G.AutoFarm then
-			CheckQuest()
-			if game:GetService("Players").LocalPlayer.PlayerGui.Main.Quest.Visible == false then
-				 TP(CQ)
-				 task.wait(0.9)
-				 game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer("StartQuest",NQ,LQ)
-				 elseif game:GetService("Players").LocalPlayer.PlayerGui.Main.Quest.Visible == true then
-					 for i,v in pairs(game:GetService("Workspace").Enemies:GetChildren()) do
-						 if v.Name == Ms then
-						 TP(v.HumanoidRootPart.CFrame * CFrame.new(0,20,0))
-						 v.HumanoidRootPart.Size = Vector3.new(60,60,60)
-					 end
-				 end
-			 end
-		 end
-	 end
- end)
- spawn(function()
-    game:GetService("RunService").RenderStepped:Connect(function()
-		if _G.AutoFarm then
-		pcall(function()
-                game:GetService'VirtualUser':CaptureController()
-			    game:GetService'VirtualUser':Button1Down(Vector2.new(0,1,0,1))
-            end)
-        end
-    end)
-end)
-
-
-
-
-
-local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/xHeptc/Kavo-UI-Library/main/source.lua"))()
-        local Window = Library.CreateLib("BloxFruits Script Test", "Ocean")
-      
-      ---Main
-        local Main = Window:NewTab("Main")
-        local MainSection = Main:NewSection("Main")
-
-
-        local toolDropdown = MainSection:NewDropdown("Weapon", "Choose your tool to use!", tools, function(weapon)
-        end)
-        
-game.Players.LocalPlayer.Backpack.DescendantAdded:Connect(function(tool)
-	local toolName = tool.Name
-	if tool:IsA("Tool") then
-		table.insert(tools, toolName)
-		toolDropdown:Refresh(tools)
-	end
-end)
-game.Players.LocalPlayer.Backpack.DescendantRemoving:Connect(function(tool)
-	local toolName = tool.Name
-	if tool:IsA("Tool") then
-		for i,v in pairs(tools) do
-			if v == toolName then
-				table.remove(tools, i)
-			end
-		end	
-	end
-	toolDropdown:Refresh(tools)
-end)
-
-        MainSection:NewToggle("AutoFarm", "AutoFarm Test", function(state)
-            if state then
-                _G.AutoFarm = true
-            else
-                _G.AutoFarm = false
-            end
-        end)
-        
-
-        
-        local FakeBeliTextBox MainSection:NewTextBox("Fake Beli", "Fake Beli", function(fakebeli)
-            game.Players.LocalPlayer.Data.Level.Value = fakebeli
-        end)
-        
-
-        ---Stats
-        local Stats = Window:NewTab("Stats")
-        local StatsSection = Stats:NewSection("Stats")
-
-        StatsSection:NewToggle("Meele", "Auto Stats", function(state)
-            if state then
-                _G.autoMeeleStats = true
-                while _G.autoMeeleStats == true do
-local args = {
-    [1] = "AddPoint",
-    [2] = "Melee",
-    [3] = 1
+#SingleInstance, force
+if (A_ScreenDPI*100//96 != 100) {
+	Run, ms-settings:display
+	msgbox, 0x1030, WARNING!!, % "Your Display Scale seems to be a value other than 100`%. This means the macro will NOT work correctly!`n`nTo change this, right click on your Desktop -> Click 'Display Settings' -> Under 'Scale & Layout', set Scale to 100`% -> Close and Restart Roblox before starting the macro.", 60
+	ExitApp
 }
-game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer(unpack(args))
-                    task.wait(30)
-                end
-            else
-                print("Toggle Off")
-            end
-        end)
-
-        StatsSection:NewToggle("Defense", "Auto Stats", function(state)
-            if state then
-                _G.autoDefenseStats = true
-                while _G.autoDefenseStats == true do
-local args = {
-    [1] = "AddPoint",
-    [2] = "Defense",
-    [3] = 1
+If !FileExist("Settings.ini") {
+	Msgbox,,Fisch Macro,You don't have a settings file yet. Would you like to create one? Press OK to proceed
+	IniWrite, 0.05, Settings.ini, Fisch, Control 
 }
-game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer(unpack(args))
-                    task.wait(30)
-                end
-            else
-                print("Toggle Off")
-            end
-        end)
-
-        StatsSection:NewToggle("Sword", "Auto Stats", function(state)
-            if state then
-                _G.autoSword = true
-                while _G.autoSword == true do
-local args = {
-    [1] = "AddPoint",
-    [2] = "Sword",
-    [3] = 1
+IniRead, Control, Settings.ini, Fisch, Control 
+If (Control = "ERROR") {
+	IniWrite, 0.05, Settings.ini, Fisch, Control 
+	Control := "0.05"
 }
-game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer(unpack(args))
-
-                    task.wait(30)
-                end
-            else
-                print("Toggle Off")
-            end
-        end)
-
-        StatsSection:NewToggle("Gun", "Auto Stats", function(state)
-            if state then
-                _G.autoGun = true
-                while _G.autoGun == true do
-local args = {
-    [1] = "AddPoint",
-    [2] = "Gun",
-    [3] = 1
+Control := StrSplit(Control, "|")
+If (Control[2]) {
+	Msgbox The control settings are outdated.`nRestored the settings to their default values.
+	IniWrite, 0.05, Settings.ini, Fisch, Control 
+	ExitApp
 }
-game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer(unpack(args))
-                    task.wait(30)
-                end
-            else
-                print("Toggle Off")
-            end
-        end)
-
-        StatsSection:NewToggle("Devil Fruit", "Auto Stats", function(state)
-            if state then
-                _G.autoDevilFruit = true
-                while _G.autoDevilFruit == true do
-local args = {
-    [1] = "AddPoint",
-    [2] = "Demon Fruit",
-    [3] = 1
+Control := Floor(96+(Control[1]*326.67)) ; calculating the catch bar size pretty pro right
+Tooltip % Control
+If (!Control) {
+	Msgbox, Failed to retrieve control from settings.ini
+	ExitApp
 }
-game:GetService("ReplicatedStorage").Remotes.CommF_:InvokeServer(unpack(args))
+if GetRobloxHWND() {
+	x := A_ScreenWidth
+	y := A_ScreenHeight
+	WinActivate, ahk_exe RobloxPlayerbeta.exe
+	WinMove, ahk_exe RobloxPlayerBeta.exe,, x/2-408, y/2-408, 100, 100
+} else {
+	Msgbox Roblox need to be opened
+	ExitApp
+}
+Reels()
+Timer := A_TickCount
+Loop,
+{
+	Send {down}{enter}
+	If (A_TickCount - Timer >= 40000) { 
+		Reels()
+		Timer := A_TickCount
+	}
+	PixelSearch,,, 246, 533, 569, 533, 0xf1f1f1, 20, FastRGB
+	if (ErrorLevel = 0) {
+		PixelSearch,,, 246, 533, 569, 533, 0x434b5b, 3, FastRGB 
+		If (ErrorLevel = 0) {
+			MouseMove, 100, 400
+			Loop
+			{
+				PixelSearch,,, 246, 533, 569, 533, 0x434b5b, 3, FastRGB
+				if (ErrorLevel = 1) {
+					Reels()
+					tooltip
+					Timer := A_TickCount
+					Break
+				}
+				PixelSearch,,, 246, 533, 569, 533, 0xf1f1f1, 20,FastRGB
+				If (ErrorLevel = 0) { 
+					Loop
+					{
+						PixelSearch, CurrentTarget,, 246, 533, 569, 533, 0x434b5b, 3, FastRGB
+						If (ErrorLevel = 1) {
+							Break
+						} else {
+							If (CurrentTarget <= (Control + 247 - 10)) {
+								Sleep 40
+								tooltip go left
+							} else If (CurrentTarget >= (568 - Control + 10)) {
+								Click, Down
+								tooltip go right
+								Loop
+								{
+									Tooltip, % A_Index
+									PixelSearch, CurrentTarget,, 246, 533, 569, 533, 0x434b5b, 3, FastRGB
+									If (ErrorLevel = 0) {
+										If (CurrentTarget <= (568 - Control)) {
+											Break
+										}
+									} else {
+										Break
+									}
+								}
+								Click, Up
+								AtRight := True
+							} else {
+								PixelSearch, CurrentBarPosition,, 246, 533, 569, 533, 0xf1f1f1, 20,FastRGB ; calculation stuff
+								If (ErrorLevel = 0) {
+									PixelSearch, CurrentTarget,, 246, 533, 569, 533, 0x434b5b, 3, FastRGB
+									CurrentBarPosition := CurrentBarPosition + (Control / 2)
+									Distance := CurrentTarget - CurrentBarPosition
+									Percentage := (Distance / Control) * 100
+									Tooltip % Percentage "x" Distance "x" CurrentBarPosition
+									if (Percentage >= 0) {
+										Val := Floor(140 + ((440 - 140) * (Percentage / 100)))
+										tooltip % Val
+										If (Val = 0) {
+											Reels(30)
+										} else {
+											Reels(Val)
+										}
+									} else {
+										Val := 0 + ((100 - 0) * (Percentage / 100))
+										Val := Floor((-1 * Val))
+										if (Val < 30) {
+											tooltip, i'd click
+											Reels(30)
+										} else {
+											tooltip % Val - 30 " sleeptime"
+											Sleep % Val - 30
+										}
+									}
+								} else {
+									Break
+								}
+							}
+						}
+					}
+					PixelSearch, CurrentTarget,, 246, 533, 569, 533, 0x434b5b, 3, FastRGB
+					If (CurrenTarget > 408) {
+						AtRight := True
+					}
+				} else {
+					PixelSearch, CurrentTarget,, 246, 533, 569, 533, 0x434b5b, 3, FastRGB
+					If (ErrorLevel = 0) {
+						If (CurrentTarget <= (Control + 247)) {
+							Sleep 40
+							tooltip go left
+						} else If (CurrentTarget >= (568 - Control - 10)) {
+							Click, Down
+							tooltip go right
+							Loop
+							{
+								Tooltip, % A_Index " 2"
+								PixelSearch, CurrentTarget,, 246, 533, 569, 533, 0x434b5b, 3, FastRGB
+								If (ErrorLevel = 0) {
+									If (CurrentTarget <= (568 - Control + 10)) {
+										Break
+									}
+								} else {
+									Break
+								}
+							}
+							Click, Up
+						} else {
+							If (AtRight and (CurrentTarget >= 408)) {
+								Sleep 100
+								AtRight := false
+							} else {
+								Tooltip, i reel 300
+								Reels(300, True)
+							}
+						}
 
-                    task.wait(30)
-                end
-            else
-                print("Toggle Off")
-            end
-        end)
-
-        ---Teleport
-        local Teleport = Window:NewTab("Teleport")
-        local TeleportSection = Teleport:NewSection("Teleport")
-
-        TeleportSection:NewButton("Pirate Island", "Teleport you there", function()
-            tweenService, tweenInfo = game:GetService("TweenService"), TweenInfo.new(45, Enum.EasingStyle.Linear)
-tweenService:Create(game:GetService("Players")["LocalPlayer"].Character.HumanoidRootPart, tweenInfo, {CFrame = CFrame.new(1041.8861083984375, 16.273563385009766, 1424.93701171875)}):Play()
-        end)
-
-        TeleportSection:NewButton("Marine Island", "Teleport you there", function()
-            tweenService, tweenInfo = game:GetService("TweenService"), TweenInfo.new(45, Enum.EasingStyle.Linear)
-tweenService:Create(game:GetService("Players")["LocalPlayer"].Character.HumanoidRootPart, tweenInfo, {CFrame = CFrame.new(-2896.6865234375, 41.488861083984375, 2009.27490234375)}):Play()
-        end)
-
-        TeleportSection:NewButton("Colosseum", "Teleport you there", function()
-            tweenService, tweenInfo = game:GetService("TweenService"), TweenInfo.new(45, Enum.EasingStyle.Linear)
-tweenService:Create(game:GetService("Players")["LocalPlayer"].Character.HumanoidRootPart, tweenInfo, {CFrame = CFrame.new(-1541.0882568359375, 7.389348983764648, -2987.40576171875)}):Play()
-        end)
-
-        TeleportSection:NewButton("Desert", "Teleport you there", function()
-            tweenService, tweenInfo = game:GetService("TweenService"), TweenInfo.new(45, Enum.EasingStyle.Linear)
-tweenService:Create(game:GetService("Players")["LocalPlayer"].Character.HumanoidRootPart, tweenInfo, {CFrame = CFrame.new(1094.3209228515625, 6.569626808166504, 4231.6357421875)}):Play()
-        end)
-        TeleportSection:NewButton("Fouatin City ", "Teleport you there", function()
-            tweenService, tweenInfo = game:GetService("TweenService"), TweenInfo.new(45, Enum.EasingStyle.Linear)
-tweenService:Create(game:GetService("Players")["LocalPlayer"].Character.HumanoidRootPart, tweenInfo, {CFrame = CFrame.new(5529.7236328125, 429.35748291015625, 4245.5498046875)}):Play()
-        end)
-        TeleportSection:NewButton("Jungle", "Teleport you there", function()
-            tweenService, tweenInfo = game:GetService("TweenService"), TweenInfo.new(45, Enum.EasingStyle.Linear)
-tweenService:Create(game:GetService("Players")["LocalPlayer"].Character.HumanoidRootPart, tweenInfo, {CFrame = CFrame.new(-1615.1883544921875, 36.85209655761719, 150.80490112304688)}):Play()
-        end)
-        TeleportSection:NewButton("Marine Fort", "Teleport you there", function()
-            tweenService, tweenInfo = game:GetService("TweenService"), TweenInfo.new(45, Enum.EasingStyle.Linear)
-tweenService:Create(game:GetService("Players")["LocalPlayer"].Character.HumanoidRootPart, tweenInfo, {CFrame = CFrame.new(-4846.14990234375, 20.652048110961914, 4393.65087890625)}):Play()
-        end)
-        TeleportSection:NewButton("Middle Town", "Teleport you there", function()
-            tweenService, tweenInfo = game:GetService("TweenService"), TweenInfo.new(45, Enum.EasingStyle.Linear)
-tweenService:Create(game:GetService("Players")["LocalPlayer"].Character.HumanoidRootPart, tweenInfo, {CFrame = CFrame.new(-705.99755859375, 7.852255344390869, 1547.5216064453125)}):Play()
-        end)
-        TeleportSection:NewButton("Prison", "Teleport you there", function()
-            tweenService, tweenInfo = game:GetService("TweenService"), TweenInfo.new(45, Enum.EasingStyle.Linear)
-tweenService:Create(game:GetService("Players")["LocalPlayer"].Character.HumanoidRootPart, tweenInfo, {CFrame = CFrame.new(4841.84423828125, 5.651970863342285, 741.329833984375)}):Play()
-        end)
-        TeleportSection:NewButton("Pirate Village", "Teleport you there", function()
-            tweenService, tweenInfo = game:GetService("TweenService"), TweenInfo.new(45, Enum.EasingStyle.Linear)
-tweenService:Create(game:GetService("Players")["LocalPlayer"].Character.HumanoidRootPart, tweenInfo, {CFrame = CFrame.new(-1146.42919921875, 4.752060890197754, 3818.503173828125)}):Play()
-        end)
-        TeleportSection:NewButton("Sky 1", "Teleport you there", function()
-            tweenService, tweenInfo = game:GetService("TweenService"), TweenInfo.new(45, Enum.EasingStyle.Linear)
-            tweenService:Create(game:GetService("Players")["LocalPlayer"].Character.HumanoidRootPart, tweenInfo, {CFrame = CFrame.new(-4967.8369140625, 717.6719970703125, -2623.84326171875)}):Play()
-        end)
-        TeleportSection:NewButton("Sky 2", "Teleport you there", function()
-            tweenService, tweenInfo = game:GetService("TweenService"), TweenInfo.new(45, Enum.EasingStyle.Linear)
-tweenService:Create(game:GetService("Players")["LocalPlayer"].Character.HumanoidRootPart, tweenInfo, {CFrame = CFrame.new(-7876.0771484375, 5545.58154296875, -381.19927978515625)}):Play()
-        end)
-        TeleportSection:NewButton("Snow", "Teleport you there", function()
-            tweenService, tweenInfo = game:GetService("TweenService"), TweenInfo.new(45, Enum.EasingStyle.Linear)
-tweenService:Create(game:GetService("Players")["LocalPlayer"].Character.HumanoidRootPart, tweenInfo, {CFrame = CFrame.new(1100.361328125, 5.290674209594727, -1151.5418701171875)}):Play()
-        end)
-        TeleportSection:NewButton("Under Water", "Teleport you there", function()
-            tweenService, tweenInfo = game:GetService("TweenService"), TweenInfo.new(45, Enum.EasingStyle.Linear)
-tweenService:Create(game:GetService("Players")["LocalPlayer"].Character.HumanoidRootPart, tweenInfo, {CFrame = CFrame.new(61135.29296875, 18.47164535522461, 1597.6827392578125)}):Play()
-        end)
-        TeleportSection:NewButton("Magma Village", "Teleport you there", function()
-            tweenService, tweenInfo = game:GetService("TweenService"), TweenInfo.new(45, Enum.EasingStyle.Linear)
-            tweenService:Create(game:GetService("Players")["LocalPlayer"].Character.HumanoidRootPart, tweenInfo, {CFrame = CFrame.new(-5248.27197265625, 8.699088096618652, 8452.890625)}):Play()
-        end)
+						PixelSearch, CurrentTarget,, 246, 533, 569, 533, 0x434b5b, 3, FastRGB
+						If (CurrenTarget > 408) {
+							AtRight := True
+						}
+					}
+				}
+			}
+		}
+	}
+}
+ExitApp
+$Space::ExitApp
+Reels(x := 0, Stop := false) {
+	If (!x) {
+		Sleep 2000
+		Click, Down, 100, 400
+		Sleep 2000
+		Click, Up, 100, 400
+		Sleep 2000
+		Send \
+		Return True
+	}
+	Click, Down
+	Timer := A_TickCount
+	Loop
+	{
+		If (Stop) {
+			PixelSearch,,, 246, 533, 569, 533, 0xf1f1f1, 20, FastRGB
+			If (ErrorLevel = 0) {
+				Whitebar := true
+				Break
+			}
+		}
+		If (A_TickCount - Timer >= x) {
+			Break
+		}
+	}
+	Click, Up
+	Return % Whitebar
+}
+GetRobloxHWND() {
+	if (hwnd := WinExist("Roblox ahk_exe RobloxPlayerBeta.exe"))
+		return hwnd
+} ; yoooo fire macro with 200 line???

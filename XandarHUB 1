@@ -2,7 +2,7 @@ local XandarHUB = loadstring(game:HttpGet(('https://raw.githubusercontent.com/sh
 
 local Window = XandarHUB:MakeWindow({Name = "XandarHUB", HidePremium = false, SaveConfig = true, ConfigFolder = "Script XandarHUB"})
 
---[[
+[[
 Name = <string> - XandarHUB.
 HidePremium = <bool> - Whether or not the user details shows Premium status or not.
 SaveConfig = <bool> - Toggles the config saving in the UI.
@@ -120,3 +120,5 @@ Name = <string> - Auto Fish.
 Default = <color3> - The default value of the colorpicker.
 Callback = <function> - The function of the colorpicker.
 ]]
+
+Slider:Set(2)

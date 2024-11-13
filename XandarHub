@@ -14,7 +14,7 @@ ImageButton1.Size = UDim2.new(0, 70, 0, 60)
 ImageButton1.Draggable = true
 ImageButton1.Image = "rbxassetid://102152430984661"
 ImageButton1.MouseButton1Down:connect(function()
-game.CoreGui:FindFirstChild("SOMEXHUB").Enabled = not game.CoreGui:FindFirstChild("SOMEXHUB").Enabled
+game.CoreGui:FindFirstChild("XandarHUB").Enabled = not game.CoreGui:FindFirstChild("SOMEXHUB").Enabled
 end)
 UICorner.Parent = ImageButton1
 
@@ -2880,7 +2880,7 @@ end
         end)
 -------------------------------------------------------------------------------------------------------------------------------------------------
 --Mainn
-local Library = Update:Window("              SHIN X HUB","rbxassetid://",Enum.KeyCode.RightControl);
+local Library = Update:Window("              XandarHUB","rbxassetid://",Enum.KeyCode.RightControl);
 Infor = Library:Tab("เกี่ยวข้อง ฮับ",102152430984661)
 Main = Library:Tab("ออโต้ ฟาร์ม ทั่วไป",114177316268156)
 Setting = Library:Tab("ตั้งค่า",114177316268156)

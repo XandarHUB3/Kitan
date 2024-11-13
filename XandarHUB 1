@@ -1,151 +1,206 @@
-local Library = loadstring(game:HttpGet('https://raw.githubusercontent.com/VisualRoblox/Roblox/main/UI-Libraries/Visual%20UI%20Library/Source.lua'))()
+local Main = require(game:GetService("ReplicatedStorage"):WaitForChild("Fluent"))
 
-local Window = Library:CreateWindow('Hub Name', 'Game Name', 'Visual UI Library', 'rbxassetid://10618928818', false, 'VisualUIConfigs', 'Default')
+local Window = Main:CreateWindow({
+    Title = "Script XandarHub " .. Main.Version,
+    SubTitle = "by XandarHub",
+    TabWidth = 160,
+    Size = UDim2.fromOffset(580, 460),
+    Acrylic = true,
+    Theme = "Dark"
+})
 
-local Tab = Window:CreateTab('Tab', true, 'rbxassetid://3926305904', Vector2.new(524, 44), Vector2.new(36, 36))
+local Tabs = {
+    Main = Window:AddTab({ Title = "Main", Icon = "box" }),
+    Settings = Window:AddTab({ Title = "Settings", Icon = "settings" })
+}
 
-local Section = Tab:CreateSection('Section')
+do
+    Tabs.Main:AddParagraph({
+        Title = "Paragraph",
+        Content = "This is a paragraph.\nSecond line!"
+    })
 
-local Label = Section:CreateLabel('Label')
-
-local Paragraph = Section:CreateParagraph('Paragraph', 'Content')
-
-local Button = Section:CreateButton('Button', function()
-    print('Button Pressed')
-end)
-
-local Slider = Section:CreateSlider('Slider', 1, 100, 50, Color3.fromRGB(0, 125, 255), function(Value)
-    print(Value)
-end)
-
-local Textbox = Section:CreateTextbox('Textbox', 'Input', function(Value)
-    print(Value)
-end)
-
-local Keybind = Section:CreateKeybind('Keybind', 'F', function()
-    print('Key Pressed')
-end)
-
-local Toggle = Section:CreateToggle('Toggle', true, Color3.fromRGB(0, 125, 255), 0.25, function(Value)
-    print(Value)
-end)
-
-local Dropdown = Section:CreateDropdown('Dropdown', {'1', '2', '3', '4', '5'}, '1', 0.25, function(Value)
-    print(Value)
-end)
-
-local Colorpicker = Section:CreateColorpicker('Colorpicker', Color3.fromRGB(0, 125, 255), 0.25, function(Value)
-    print(Value)
-end)
-
-local Image = Section:CreateImage('Image', 'rbxassetid://10618928818', UDim2.new(0, 200, 0, 200))
-    
-local UpdateSection = Tab:CreateSection('Update Functions')
-
-local LabelBox = UpdateSection:CreateTextbox('Update Label', 'New Text', function(Value)
-    Label:UpdateLabel(Value, true)
-end)
-    
-local ParagraphBox = UpdateSection:CreateTextbox('Update Paragraph', 'New Text', function(Value)
-    Paragraph:UpdateParagraph('Paragraph', Value)
-end)
-    
-local UpdateDropdown1 = UpdateSection:CreateButton('Update Dropdown 1', function()
-    Dropdown:UpdateDropdown({'1', '2', '3'})
-end)
-    
-local UpdateDropdown2 = UpdateSection:CreateButton('Update Dropdown 2', function()
-    Dropdown:UpdateDropdown({'1', '2', '3', '4', '5', '6'})
-end)
-
-local UpdateImage = UpdateSection:CreateButton('Update Image', function()
-    Image:UpdateImage('rbxassetid://10580575081', UDim2.new(0, 200, 0, 200))
-end)
-
-local LibraryFunctions = Window:CreateTab('Library Functions', false, 'rbxassetid://3926305904', Vector2.new(524, 44), Vector2.new(36, 36))
-
-local UIFunctions = LibraryFunctions:CreateSection('UI Functions')
-
-local DestroyButton = UIFunctions:CreateButton('Destroy UI', function()
-    Library:DestroyUI()
-end)
-
-local ToggleKeybind = UIFunctions:CreateKeybind('Toggle UI', 'E', function()
-    Library:ToggleUI()
-end)
-
-local TextboxKeybind = UIFunctions:CreateTextbox('Notification', 'Text', function(Value)
-    Library:CreateNotification('Notification', Value, 5)
-end)
-
-local TransparencySlider = UIFunctions:CreateSlider('Transparency', 0, 100, 0, Color3.fromRGB(0, 125, 255), function(Value)
-    Library:SetTransparency(Value / 100, true)
-end)
-
-local TextPromptButton = UIFunctions:CreateButton('Create Text Prompt', function()
-    Library:CreatePrompt('Text', 'Prompt Title', 'Prompt Text', 'Alright')
-end)
-
-local OneButtonPromptButton = UIFunctions:CreateButton('Create One Button Prompt', function()
-    Library:CreatePrompt('OneButton', 'Prompt Title', 'Prompt Text', {
-        'Alright',
-        function()
-            print('Prompt Button Pressed')
+    Tabs.Main:AddButton({
+        Title = "Button",
+        Description = "Very important button",
+        Callback = function()
+            Window:Dialog({
+                Title = "Title",
+                Content = "This is a dialog",
+                Buttons = {
+                    {
+                        Title = "Confirm",
+                        Callback = function()
+                            Window:Dialog({
+                                Title = "Another Dialog",
+                                Content = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse mollis dolor eget erat mattis, id mollis mauris cursus. Proin ornare sollicitudin odio, id posuere diam luctus id.",
+                                Buttons = { { Title = "Ok", Callback = function() print("Ok") end} }
+                            })
+                            Main.Options.Toggle:Destroy()
+                        end
+                    },
+                    {
+                        Title = "Cancel",
+                        Callback = function()
+                            print("Cancelled the dialog.")
+                        end
+                    }
+                }
+            })
         end
     })
-end)
 
-local TwoButtonPromptButton = UIFunctions:CreateButton('Create Two Button Prompt', function()
-    Library:CreatePrompt('TwoButton', 'Prompt Title', 'Prompt Text', {
-        'Button 1',
-        function()
-            print('Button 1')
-        end,
-        'Button 2',
-        function()
-            print('Button 2')
+    local Toggle = Tabs.Main:AddToggle("Toggle", {Title = "Toggle", Default = false })
+    
+    local Slider = Tabs.Main:AddSlider("Slider", {
+        Title = "Slider",
+        Description = "This is a slider",
+        Default = 2.0,
+        Min = 0.0,
+        Max = 15.5,
+        Rounding = 1
+    })
+
+
+    local Dropdown = Tabs.Main:AddDropdown("Dropdown", {
+        Title = "Dropdown",
+        Values = {"one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve", "thirteen", "fourteen"},
+        Multi = false,
+        Default = 1,
+    })
+
+    Dropdown:SetValue("four")
+    
+    local MultiDropdown = Tabs.Main:AddDropdown("MultiDropdown", {
+        Title = "Dropdown",
+        Description = "You can select multiple values.",
+        Values = {"one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve", "thirteen", "fourteen"},
+        Multi = true,
+        Default = {"seven", "twelve"},
+    })
+
+    MultiDropdown:SetValue({
+        three = true,
+        five = true,
+        seven = false
+    })
+
+    local Colorpicker = Tabs.Main:AddColorpicker("Colorpicker", {
+        Title = "Colorpicker",
+        Default = Color3.fromRGB(96, 205, 255)
+    })
+
+    local TColorpicker = Tabs.Main:AddColorpicker("TransparencyColorpicker", {
+        Title = "Colorpicker",
+        Description = "but you can change the transparency.",
+        Transparency = 0,
+        Default = Color3.fromRGB(96, 205, 255)
+    })
+
+    local Keybind = Tabs.Main:AddKeybind("Keybind", {
+        Title = "KeyBind",
+        Mode = "Hold",
+        Default = "LeftControl",
+        ChangedCallback = function(New)
+            print("Keybind changed:", New)
         end
     })
-end)
 
-local ConfigSection = LibraryFunctions:CreateSection('Config')
+    local Input = Tabs.Main:AddInput("Input", {
+        Title = "Input",
+        Default = "Default",
+        Numeric = false,
+        Finished = false,
+        Placeholder = "Placeholder text",
+        Callback = function(Value)
+            print("Input changed:", Value)
+        end
+    })
+       
+    Toggle:OnChanged(function()
+        print("Toggle changed:", Main.Options["Toggle"].Value)
+    end)
 
-local ConfigNameString = ''
-local ConfigName = ConfigSection:CreateTextbox('Config Name', 'Input', function(Value)
-    ConfigNameString = Value
-end)
+    Slider:OnChanged(function(Value)
+        print("Slider changed:", Value)
+    end)
 
-local SaveConfigButton = ConfigSection:CreateButton('Save Config', function()
-    Library:SaveConfig(ConfigNameString)
-end)
+    Dropdown:OnChanged(function(Value)
+        print("Dropdown changed:", Value)
+    end)
 
-local SelectedConfig = ''
-local ConfigsDropdown = ConfigSection:CreateDropdown('Configs', Library:GetConfigs(), nil, 0.25, function(Value)
-    SelectedConfig = Value
-end)
+    MultiDropdown:OnChanged(function(Value)
+        local Values = {}
+        for Value, State in next, Value do
+            table.insert(Values, Value)
+        end
+        print("Mutlidropdown changed:", table.concat(Values, ", "))
+    end)
 
-local DeleteConfigButton = ConfigSection:CreateButton('Delete Config', function()
-    Library:DeleteConfig(SelectedConfig)
-end)
+    Colorpicker:OnChanged(function()
+        print("Colorpicker changed:", TColorpicker.Value)
+    end)
 
-local LoadConfigButton = ConfigSection:CreateButton('Load Config', function()
-    Library:LoadConfig(SelectedConfig)
-end)
+    TColorpicker:OnChanged(function()
+        print(
+            "TColorpicker changed:", TColorpicker.Value,
+            "Transparency:", TColorpicker.Transparency
+        )
+    end)
 
-local RefreshConfigsButton = ConfigSection:CreateButton('Refresh', function()
-    ConfigsDropdown:UpdateDropdown(Library:GetConfigs())
-end)
+    task.spawn(function()
+        while true do
+            wait(1)
+            local state = Keybind:GetState()
+            if state then
+                print("Keybind is being held down")
+            end
+            if Main.Unloaded then break end
+        end
+    end)
 
-local ThemesSection = LibraryFunctions:CreateSection('Themes')
-
-local ThemesDropdown = ThemesSection:CreateDropdown('Themes', Library:GetThemes(), nil, 0.25, function(Value)
-    Library:ChangeTheme(Value)
-end)
-
-local ColorSection = LibraryFunctions:CreateSection('Custom Colors')
-
-for Index, CurrentColor in next, Library:ReturnTheme() do
-    ColorSection:CreateColorpicker(Index, CurrentColor, 0.25, function(Color)
-        Library:ChangeColor(Index, Color)
-    end, {true})
 end
+
+do
+
+    local InterfaceSection = Tabs.Settings:AddSection("Interface")
+
+    InterfaceSection:AddDropdown("InterfaceTheme", {
+        Title = "Theme",
+        Description = "Changes the interface theme.",
+        Values = Main.Themes,
+        Default = Main.Theme,
+        Callback = function(Value)
+            Main:SetTheme(Value)
+        end
+    })
+
+    if Main.UseAcrylic then
+        InterfaceSection:AddToggle("AcrylicToggle", {
+            Title = "Acrylic",
+            Description = "The blurred background requires graphic quality 8+",
+            Default = Main.Acrylic,
+            Callback = function(Value)
+                Main:ToggleAcrylic(Value)
+            end
+        })
+    end
+
+    InterfaceSection:AddToggle("TransparentToggle", {
+        Title = "Transparency",
+        Description = "Makes the interface transparent.",
+        Default = Main.Transparency,
+        Callback = function(Value)
+            Main:ToggleTransparency(Value)
+        end
+    })
+
+    InterfaceSection:AddKeybind("MenuKeybind", { Title = "Minimize Bind", Default = "RightShift" })
+    Main.MinimizeKeybind = Main.Options.MenuKeybind 
+end
+
+Main:Notify({
+    Title = "Fluent",
+    Content = "The script has been loaded.",
+    Duration = 8
+})

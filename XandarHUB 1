@@ -122,3 +122,84 @@ Callback = <function> - The function of the colorpicker.
 ]]
 
 Slider:Set(2)
+
+Tab:AddLabel("Label")
+
+CoolLabel:Set("Label New!")
+
+Tab:AddParagraph("Paragraph","Paragraph Content")
+
+CoolParagraph:Set("Paragraph New!", "New Paragraph Content!")
+
+Tab:AddTextbox({
+	Name = "Textbox",
+	Default = "default box input",
+	TextDisappear = true,
+	Callback = function(Value)
+		print(Value)
+	end	  
+})
+
+[[
+Name = <string> - The name of the textbox.
+Default = <string> - The default value of the textbox.
+TextDisappear = <bool> - Makes the text disappear in the textbox after losing focus.
+Callback = <function> - The function of the textbox.
+]]
+
+Tab:AddBind({
+	Name = "Bind",
+	Default = Enum.KeyCode.E,
+	Hold = false,
+	Callback = function()
+		print("press")
+	end    
+})
+
+[[
+Name = <string> - The name of the bind.
+Default = <keycode> - The default value of the bind.
+Hold = <bool> - Makes the bind work like: Holding the key > The bind returns true, Not holding the key > Bind returns false.
+Callback = <function> - The function of the bind.
+]]
+
+Bind:Set(Enum.KeyCode.E)
+
+Tab:AddDropdown({
+	Name = "Dropdown",
+	Default = "1",
+	Options = {"1", "2"},
+	Callback = function(Value)
+		print(Value)
+	end    
+})
+
+[[
+Name = <string> - The name of the dropdown.
+Default = <string> - The default value of the dropdown.
+Options = <table> - The options in the dropdown.
+Callback = <function> - The function of the dropdown.
+]]
+
+Dropdown:Refresh(List<table>,true)
+
+Dropdown:Set("dropdown option")
+
+OrionLib:Init()
+
+Tab1:AddToggle({
+    Name = "Toggle",
+    Default = true,
+    Save = true,
+    Flag = "toggle"
+})
+
+In order to make your interface use the configs function you first need to add the `SaveConfig` and `ConfigFolder` arguments to your window function. The explanation of these arguments in above.
+Then you need to add the `Flag` and `Save` values to every toggle, slider, dropdown, bind, and colorpicker you want to include in the config file.
+The `Flag = <string>` argument is the ID of an element in the config file.
+The `Save = <bool>` argument includes the element in the config file.
+Config files are made for every game the library is launched in.
+
+OrionLib:Destroy()
+
+

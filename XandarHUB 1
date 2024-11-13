@@ -21,7 +21,7 @@ local Tab = Window:MakeTab({
 })
 
 --[[
-Name = <string> - The name of the tab.
+Name = <string> - Fish.
 Icon = <string> - The icon of the tab.
 PremiumOnly = <bool> - Makes the tab accessible to Sirus Premium users only.
 ]]

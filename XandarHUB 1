@@ -44,8 +44,20 @@ OrionLib:MakeNotification({
 })
 
 --[[
-Title = <string> - The title of the notification.
+Title = <string> - Script XandarHUB.
 Content = <string> - The content of the notification.
 Image = <string> - The icon of the notification.
 Time = <number> - The duration of the notfication.
+]]
+
+Tab:AddButton({
+	Name = "Button!",
+	Callback = function()
+      		print("button pressed")
+  	end    
+})
+
+--[[
+Name = <string> - Auto Fishing.
+Callback = <function> - The function of the button.
 ]]

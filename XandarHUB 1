@@ -1,6 +1,6 @@
 local XandarHUB = loadstring(game:HttpGet(('https://raw.githubusercontent.com/shlexware/Orion/main/source')))()
 
-local Window = OrionLib:MakeWindow({Name = "XandarHUB", HidePremium = false, SaveConfig = true, ConfigFolder = "OrionTest"})
+local Window = XandarHUB:MakeWindow({Name = "XandarHUB", HidePremium = false, SaveConfig = true, ConfigFolder = "OrionTest"})
 
 --[[
 Name = <string> - XandarHUB.

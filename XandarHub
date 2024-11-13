@@ -14,7 +14,7 @@ ImageButton1.Size = UDim2.new(0, 70, 0, 60)
 ImageButton1.Draggable = true
 ImageButton1.Image = "rbxassetid://102152430984661"
 ImageButton1.MouseButton1Down:connect(function()
-game.CoreGui:FindFirstChild("XandarHUB").Enabled = not game.CoreGui:FindFirstChild("SOMEXHUB").Enabled
+game.CoreGui:FindFirstChild("SOMEXHUB").Enabled = not game.CoreGui:FindFirstChild("SOMEXHUB").Enabled
 end)
 UICorner.Parent = ImageButton1
 

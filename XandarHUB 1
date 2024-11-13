@@ -36,6 +36,10 @@ local Section = Tab:AddSection({
 	Name = "Auto Fish"
 })
 
+[[
+Name = <string> - The name of the section.
+]]
+
 OrionLib:MakeNotification({
 	Name = "XandarHUB!",
 	Content = "Notification content... what will it say??",
@@ -56,12 +60,16 @@ Tab:AddButton({
       		print("button pressed")
   	end    
 })
+
 [[
 Name = <string> - Auto Fishing.
 Callback = <function> - The function of the button.
 ]]
 
-[[
-Name = <string> - The name of the button.
-Callback = <function> - The function of the button.
-]]
+Tab:AddToggle({
+	Name = "This is a toggle!",
+	Default = false,
+	Callback = function(Value)
+		print(Value)
+	end    
+})

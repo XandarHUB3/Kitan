@@ -1,3 +1,5 @@
 local XandarHub = loadstring(game:HttpGet(('https://raw.githubusercontent.com/shlexware/Orion/main/source')))()
 
 local Window = XandarHub:MakeWindow({Name = "Script XandarHub", HidePremium = true, SaveConfig = true, ConfigFolder = "XandarHub"})
+
+local Tab = Window:NewTab("Auto Farm)

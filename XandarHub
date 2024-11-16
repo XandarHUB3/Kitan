@@ -1,260 +1,152 @@
-local Fluent = loadstring(game:HttpGet("https://github.com/dawid-scripts/Fluent/releases/latest/download/main.lua"))()
-local SaveManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/SaveManager.lua"))()
-local InterfaceManager = loadstring(game:HttpGet("https://raw.githubusercontent.com/dawid-scripts/Fluent/master/Addons/InterfaceManager.lua"))()
-
-local Window = XandarHub:CreateWindow({
-    Title = "Script" XandatHub
-    SubTitle = "By XandarHub",
-    TabWidth = 160,
-    Size = UDim2.fromOffset(580, 460),
-    Acrylic = true, -- The blur may be detectable, setting this to false disables blur entirely
-    Theme = "Dark",
-    MinimizeKey = Enum.KeyCode.LeftControl -- Used when theres no MinimizeKeybind
-})
-
---Fluent provides Lucide Icons https://lucide.dev/icons/ for the tabs, icons are optional
-local Tabs = {
-    Main = Window:AddTab({ Title = "Main", Icon = "" }),
-    Settings = Window:AddTab({ Title = "Settings", Icon = "settings" })
+-- Configuration variables
+local config = {
+    fpsCap = 9999,
+    disableChat = true,            -- Set to true to hide the chat
+    enableBigButton = true,        -- Set to true to enlarge the button in the shake UI
+    bigButtonScaleFactor = 2,      -- Scale factor for big button size
+    shakeSpeed = 0.05,             -- Lower value means faster shake (e.g., 0.05 for fast, 0.1 for normal)
+    FreezeWhileFishing = true      -- Set to true to freeze your character while fishing
 }
 
-local Options = Fluent.Options
+-- Set FPS cap
+setfpscap(config.fpsCap)
 
-do
-    Fluent:Notify({
-        Title = "Notification",
-        Content = "This is a notification",
-        SubContent = "SubContent", -- Optional
-        Duration = 5 -- Set to nil to make the notification not disappear
-    })
+-- Services
+local players = game:GetService("Players")
+local vim = game:GetService("VirtualInputManager")
+local run_service = game:GetService("RunService")
+local replicated_storage = game:GetService("ReplicatedStorage")
+local localplayer = players.LocalPlayer
+local playergui = localplayer.PlayerGui
+local StarterGui = game:GetService("StarterGui")
 
-
-
-    Tabs.Main:AddParagraph({
-        Title = "Paragraph",
-        Content = "This is a paragraph.\nSecond line!"
-    })
-
-
-
-    Tabs.Main:AddButton({
-        Title = "Button",
-        Description = "Very important button",
-        Callback = function()
-            Window:Dialog({
-                Title = "Title",
-                Content = "This is a dialog",
-                Buttons = {
-                    {
-                        Title = "Confirm",
-                        Callback = function()
-                            print("Confirmed the dialog.")
-                        end
-                    },
-                    {
-                        Title = "Cancel",
-                        Callback = function()
-                            print("Cancelled the dialog.")
-                        end
-                    }
-                }
-            })
-        end
-    })
-
-
-
-    local Toggle = Tabs.Main:AddToggle("MyToggle", {Title = "Toggle", Default = false })
-
-    Toggle:OnChanged(function()
-        print("Toggle changed:", Options.MyToggle.Value)
-    end)
-
-    Options.MyToggle:SetValue(false)
-
-
-    
-    local Slider = Tabs.Main:AddSlider("Slider", {
-        Title = "Slider",
-        Description = "This is a slider",
-        Default = 2,
-        Min = 0,
-        Max = 5,
-        Rounding = 1,
-        Callback = function(Value)
-            print("Slider was changed:", Value)
-        end
-    })
-
-    Slider:OnChanged(function(Value)
-        print("Slider changed:", Value)
-    end)
-
-    Slider:SetValue(3)
-
-
-
-    local Dropdown = Tabs.Main:AddDropdown("Dropdown", {
-        Title = "Dropdown",
-        Values = {"one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve", "thirteen", "fourteen"},
-        Multi = false,
-        Default = 1,
-    })
-
-    Dropdown:SetValue("four")
-
-    Dropdown:OnChanged(function(Value)
-        print("Dropdown changed:", Value)
-    end)
-
-
-    
-    local MultiDropdown = Tabs.Main:AddDropdown("MultiDropdown", {
-        Title = "Dropdown",
-        Description = "You can select multiple values.",
-        Values = {"one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten", "eleven", "twelve", "thirteen", "fourteen"},
-        Multi = true,
-        Default = {"seven", "twelve"},
-    })
-
-    MultiDropdown:SetValue({
-        three = true,
-        five = true,
-        seven = false
-    })
-
-    MultiDropdown:OnChanged(function(Value)
-        local Values = {}
-        for Value, State in next, Value do
-            table.insert(Values, Value)
-        end
-        print("Mutlidropdown changed:", table.concat(Values, ", "))
-    end)
-
-
-
-    local Colorpicker = Tabs.Main:AddColorpicker("Colorpicker", {
-        Title = "Colorpicker",
-        Default = Color3.fromRGB(96, 205, 255)
-    })
-
-    Colorpicker:OnChanged(function()
-        print("Colorpicker changed:", Colorpicker.Value)
-    end)
-    
-    Colorpicker:SetValueRGB(Color3.fromRGB(0, 255, 140))
-
-
-
-    local TColorpicker = Tabs.Main:AddColorpicker("TransparencyColorpicker", {
-        Title = "Colorpicker",
-        Description = "but you can change the transparency.",
-        Transparency = 0,
-        Default = Color3.fromRGB(96, 205, 255)
-    })
-
-    TColorpicker:OnChanged(function()
-        print(
-            "TColorpicker changed:", TColorpicker.Value,
-            "Transparency:", TColorpicker.Transparency
-        )
-    end)
-
-
-
-    local Keybind = Tabs.Main:AddKeybind("Keybind", {
-        Title = "KeyBind",
-        Mode = "Toggle", -- Always, Toggle, Hold
-        Default = "LeftControl", -- String as the name of the keybind (MB1, MB2 for mouse buttons)
-
-        -- Occurs when the keybind is clicked, Value is `true`/`false`
-        Callback = function(Value)
-            print("Keybind clicked!", Value)
-        end,
-
-        -- Occurs when the keybind itself is changed, `New` is a KeyCode Enum OR a UserInputType Enum
-        ChangedCallback = function(New)
-            print("Keybind changed!", New)
-        end
-    })
-
-    -- OnClick is only fired when you press the keybind and the mode is Toggle
-    -- Otherwise, you will have to use Keybind:GetState()
-    Keybind:OnClick(function()
-        print("Keybind clicked:", Keybind:GetState())
-    end)
-
-    Keybind:OnChanged(function()
-        print("Keybind changed:", Keybind.Value)
-    end)
-
-    task.spawn(function()
-        while true do
-            wait(1)
-
-            -- example for checking if a keybind is being pressed
-            local state = Keybind:GetState()
-            if state then
-                print("Keybind is being held down")
-            end
-
-            if Fluent.Unloaded then break end
-        end
-    end)
-
-    Keybind:SetValue("MB2", "Toggle") -- Sets keybind to MB2, mode to Hold
-
-
-    local Input = Tabs.Main:AddInput("Input", {
-        Title = "Input",
-        Default = "Default",
-        Placeholder = "Placeholder",
-        Numeric = false, -- Only allows numbers
-        Finished = false, -- Only calls callback when you press enter
-        Callback = function(Value)
-            print("Input changed:", Value)
-        end
-    })
-
-    Input:OnChanged(function()
-        print("Input updated:", Input.Value)
-    end)
+-- Disable chat if the option is enabled in config
+if config.disableChat then
+    StarterGui:SetCoreGuiEnabled(Enum.CoreGuiType.Chat, false)
 end
 
+-- Utility functions
+local utility = {blacklisted_attachments = {"bob", "bodyweld"}}; do
+    function utility.simulate_click(x, y, mb)
+        vim:SendMouseButtonEvent(x, y, (mb - 1), true, game, 1)
+        vim:SendMouseButtonEvent(x, y, (mb - 1), false, game, 1)
+    end
 
--- Addons:
--- SaveManager (Allows you to have a configuration system)
--- InterfaceManager (Allows you to have a interface managment system)
+    function utility.move_fix(bobber)
+        for index, value in bobber:GetDescendants() do
+            if (value.ClassName == "Attachment" and table.find(utility.blacklisted_attachments, value.Name)) then
+                value:Destroy()
+            end
+        end
+    end
+end
 
--- Hand the library over to our managers
-SaveManager:SetLibrary(Fluent)
-InterfaceManager:SetLibrary(Fluent)
+local farm = {reel_tick = nil, cast_tick = nil}; do
 
--- Ignore keys that are used by ThemeManager.
--- (we dont want configs to save themes, do we?)
-SaveManager:IgnoreThemeSettings()
+    function farm.find_rod()
+        local character = localplayer.Character
+        if not character then return nil end
 
--- You can add indexes of elements the save manager should ignore
-SaveManager:SetIgnoreIndexes({})
+        for _, tool in ipairs(character:GetChildren()) do
+            if tool:IsA("Tool") and (tool.Name:find("rod") or tool.Name:find("Rod")) then
+                return tool
+            end
+        end
+        return nil
+    end
 
--- use case for doing it this way:
--- a script hub could have themes in a global folder
--- and game configs in a separate folder per game
-InterfaceManager:SetFolder("FluentScriptHub")
-SaveManager:SetFolder("FluentScriptHub/specific-game")
+    function farm.freeze_character(freeze)
+        local character = localplayer.Character
+        if character then
+            local humanoid = character:FindFirstChildOfClass("Humanoid")
+            if humanoid then
+                if freeze then
+                    humanoid.WalkSpeed = 0
+                    humanoid.JumpPower = 0
+                else
+                    humanoid.WalkSpeed = 16  -- Default WalkSpeed
+                    humanoid.JumpPower = 50  -- Default JumpPower
+                end
+            end
+        end
+    end
 
-InterfaceManager:BuildInterfaceSection(Tabs.Settings)
-SaveManager:BuildConfigSection(Tabs.Settings)
+    function farm.cast()
+        local character = localplayer.Character
+        if not character then return end
 
+        local rod = farm.find_rod()
+        if not rod then return end
 
-Window:SelectTab(1)
+        -- Instantly cast without cooldown
+        local args = { [1] = 100, [2] = 1 }
+        rod.events.cast:FireServer(unpack(args))
+        farm.cast_tick = 0  -- Reset last cast time
+    end
 
-Fluent:Notify({
-    Title = "Fluent",
-    Content = "The script has been loaded.",
-    Duration = 8
-})
+    function farm.shake()
+        local shake_ui = playergui:FindFirstChild("shakeui")
+        if shake_ui then
+            local safezone = shake_ui:FindFirstChild("safezone")
+            local button = safezone and safezone:FindFirstChild("button")
 
--- You can use the SaveManager:LoadAutoloadConfig() to load a config
--- which has been marked to be one that auto loads!
-SaveManager:LoadAutoloadConfig()
+            if button then
+                -- Apply big button option from config
+                if config.enableBigButton then
+                    button.Size = UDim2.new(config.bigButtonScaleFactor, 0, config.bigButtonScaleFactor, 0)
+                else
+                    button.Size = UDim2.new(1, 0, 1, 0)  -- Reset to default size if disabled
+                end
+
+                if button.Visible then
+                    utility.simulate_click(
+                        button.AbsolutePosition.X + button.AbsoluteSize.X / 2,
+                        button.AbsolutePosition.Y + button.AbsoluteSize.Y / 2,
+                        1
+                    )
+                end
+            end
+        end
+    end
+
+    function farm.reel()
+        local reel_ui = playergui:FindFirstChild("reel")
+        if not reel_ui then return end
+
+        local reel_bar = reel_ui:FindFirstChild("bar")
+        if not reel_bar then return end
+       
+        local reel_client = reel_bar:FindFirstChild("reel")
+        if not reel_client then return end
+
+        if reel_client.Disabled == true then
+            reel_client.Disabled = false
+        end
+
+        local update_colors = getsenv(reel_client).UpdateColors
+
+        -- Instant reel without waiting
+        if update_colors then
+            setupvalue(update_colors, 1, 100)
+            replicated_storage.events.reelfinished:FireServer(getupvalue(update_colors, 1), true)
+        end
+    end
+   
+end
+
+-- Main loop with rod check, configurable shake speed, and freeze feature
+while task.wait(config.shakeSpeed) do
+    local rod = farm.find_rod() -- Check if player is holding a rod
+    if rod then
+        -- Freeze character if enabled in config
+        if config.FreezeWhileFishing then
+            farm.freeze_character(true)
+        end
+        farm.cast()
+        farm.shake()
+        farm.reel()
+    else
+        -- Unfreeze character when not fishing
+        farm.freeze_character(false)
+    end
+end
